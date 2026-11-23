@@ -233,6 +233,9 @@ table.hm{border-collapse:separate;border-spacing:2px;font-size:12px;padding:10px
 .chips button:hover{border-color:var(--fg);color:var(--fg)}
 .chips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#000;font-weight:600}
 .hint{margin:0;font-size:13px;color:var(--muted)}
+.hint .touch{display:none}
+@media (hover:none){.hint .desk{display:none}.hint .touch{display:inline}}
+.chips .lbl{white-space:nowrap}
 .rcard{position:relative;transition:transform .3s cubic-bezier(.2,.7,.2,1)}
 .rcard:hover,.rcard:focus-visible{transform:translateY(-4px)}
 .rcard .rk{position:absolute;top:0;left:4px;font-family:var(--display);font-stretch:80%;font-weight:700;font-size:15px;color:var(--dim)}
@@ -369,6 +372,11 @@ footer p{max-width:75ch;margin:0 0 8px}
   .frow{grid-template-columns:24px minmax(0,1fr) 44px;}
   .frow .fbar{grid-column:2/4;grid-row:2}
   .radkey{grid-template-columns:1fr}
+  .radgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 10px}
+  .rcard .nm{font-size:12.5px}
+  .rcard .sc{font-size:10.5px}
+  .chips{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+  .chips button{flex:none}
   .legend{font-size:10px;padding:6px 8px;gap:2px;left:6px;top:6px;background:rgba(0,0,0,.6)}
   .legend .sw{width:8px;height:8px}
   .mapnote{display:none}
@@ -492,7 +500,7 @@ footer p{max-width:75ch;margin:0 0 8px}
   <section class="block" id="profiles">
     <div class="sec-head"><div><div class="kicker"><i></i>Domains</div><h2>Toilet profiles</h2></div><p>Each shape shows a toilet's score in each of the 9 domains, as a share of that domain's maximum. A fuller shape means a stronger toilet.</p></div>
     <div class="radkey"><div id="radkey"></div><p class="eyebrow" style="line-height:1.8">Domains and points available<br><span id="domlist" style="text-transform:none;letter-spacing:0;font-family:var(--body);font-size:13px;color:#c4c4c4"></span></p></div>
-    <div class="radtools"><div class="chips" id="radsort" role="group" aria-label="Sort profiles"></div><p class="hint">Hover over a profile to see its domain scores against the average. Click or tap to open all 25 ratings.</p></div>
+    <div class="radtools"><div class="chips" id="radsort" role="group" aria-label="Sort profiles"></div><p class="hint"><span class="desk">Hover over a profile to see its domain scores against the average. Click to open all 25 ratings.</span><span class="touch">Tap a profile to open its domain scores and all 25 ratings.</span></p></div>
     <div class="radgrid" id="radgrid" data-rv></div>
   </section>
 
@@ -743,7 +751,7 @@ addEventListener('keydown',e=>{if(e.key==='Escape')closeT();if(e.key==='Enter'){
 
   // one-time reveals
   const rio=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add('in');rio.unobserve(e.target);
-    if(e.target.id==='rank'){rankShown=true;rank()}}),{threshold:.12});
+    if(e.target.id==='rank'){rankShown=true;rank()}}),{threshold:0,rootMargin:'0px 0px -12% 0px'});
   document.querySelectorAll('.sec-head,[data-rv],#hm,#rank').forEach(el=>rio.observe(el));
   document.querySelectorAll('.icons>span').forEach((el,i)=>el.style.transitionDelay=(i*28)+'ms');
   document.querySelectorAll('.frow').forEach((el,i)=>{el.style.transitionDelay=(i*45)+'ms';el.querySelector('.fbar').style.transitionDelay=(i*45+100)+'ms'});
